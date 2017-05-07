@@ -1,6 +1,6 @@
-let supertest = require("supertest");
-let app = require("./../server.js");
-let should = require("should");
+var supertest = require("supertest");
+var app = require("./../server.js");
+var should = require("should");
 
 
 // UNIT test begin
