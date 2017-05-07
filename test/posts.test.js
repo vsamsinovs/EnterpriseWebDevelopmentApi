@@ -1,6 +1,7 @@
-import supertest from "supertest";
-import { app } from "./../server";
-import should from "should";
+let supertest = require("supertest");
+let app = require("./../server.js");
+let should = require("should");
+
 
 // UNIT test begin
 describe("Contacts API unit test", function () {
