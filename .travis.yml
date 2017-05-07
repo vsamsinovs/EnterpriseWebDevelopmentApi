@@ -1,0 +1,25 @@
+sudo: true
+language: node_js
+node_js:
+- '5.7'
+cache:
+  directories:
+    - node_modules
+env:
+  global:
+  - CF_API=https://api.eu-gb.bluemix.net/
+  - CF_USERNAME=vsamsinovs@gmail.com
+  - CF_ORG=vsamsinovs@gmail.com
+  - CF_SPACE=dev
+before_deploy:
+  - wget https://s3.amazonaws.com/go-cli/releases/v6.12.4/cf-cli_amd64.deb -qO temp.deb && sudo dpkg -i temp.deb
+  - rm temp.deb
+  - cf login -a ${CF_API} -u ${CF_USERNAME} -p ${BLUEMIX_PASSWORD} -o ${CF_ORG} -s ${CF_SPACE}
+  - cf install-plugin autopilot -r CF-Community
+deploy:
+  - edge: true
+    provider: script
+    script: cf zero-downtime-push [app name] -f ./manifest.yml;
+    skip_cleanup: true
+    on:
+      branch: master
