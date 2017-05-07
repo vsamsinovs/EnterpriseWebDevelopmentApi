@@ -94,7 +94,7 @@ mongoose.connect(credentials.uri, {
       // of MongoDB deployment. In this example, we want the
       // "examples" database so what we do here is create that
       // connection using the current connection.
-      //mongodb = db.db("examples");
+      //mongodb = db.db("examples"); 
 
     }
   }
