@@ -12,7 +12,7 @@ import { loadPosts } from './postData';
 
 import Post from './public/api/posts/post.schema'
 
-import { Mockgoose } from 'mockgoose';
+//import { Mockgoose } from 'mockgoose';
 import { nodeEnv } from './config';
 
 export const app = express();
@@ -38,6 +38,10 @@ var credentials = mongodb_services[0].credentials;
 var ca = [new Buffer(credentials.ca_certificate_base64, 'base64')];
 
 var mongodb;
+
+/*
+
+for testing. was unable to get it working with bluemix
 
 if (nodeEnv == 'test') {
   //use mockgoose for testing
@@ -74,6 +78,20 @@ else {
     }
   );
 }
+*/
+mongoose.connect(credentials.uri, {
+  mongos: {
+    ssl: true,
+    sslValidate: true,
+    sslCA: ca,
+    poolSize: 1,
+    reconnectTries: 1
+  }
+},
+  function (err, db) {
+    console.log("something went wrong", err);
+  }
+);
 
 mongoose.connection.on('error', function (err) {
   console.error('MongoDB connection error: ' + err);
