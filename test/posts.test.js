@@ -1,7 +1,6 @@
-var supertest = require("supertest");
-var app = require("./../server.js");
-var should = require("should");
-
+import supertest from "supertest";
+import { app } from "./../server";
+import should from "should";
 
 // UNIT test begin
 describe("Contacts API unit test", function () {
@@ -17,6 +16,6 @@ describe("Contacts API unit test", function () {
         // HTTP status should be 200
         res.status.should.equal(200);
         done();
-      }); 
+      });
   });
 });
