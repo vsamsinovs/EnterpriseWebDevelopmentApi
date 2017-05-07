@@ -1,6 +1,7 @@
 import supertest from "supertest";
 import { app } from "./../server";
 import should from "should";
+import 'babel-polyfill'
 
 // UNIT test begin
 describe("Contacts API unit test", function () {
