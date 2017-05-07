@@ -27,13 +27,6 @@
     "type": "git",
     "url": "https://github.com/IBM-Bluemix/compose-mongodb-helloworld-nodejs.git"
   },
-  "author": "IBM Corp.",
-  "contributors": [
-    {
-      "name": "Neil Dewhurst",
-      "email": "ndewhurs@uk.ibm.com"
-    }
-  ],
   "bugs": {
     "url": "https://github.com/IBM-Bluemix/compose-mongodb-helloworld-nodejs/issues"
   },

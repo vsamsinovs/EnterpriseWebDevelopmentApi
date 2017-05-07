@@ -19,7 +19,7 @@ before_deploy:
 deploy:
   - edge: true
     provider: script
-    script: cf zero-downtime-push [app name] -f ./manifest.yml;
+    script: cf zero-downtime-push vs-enterpriseweb-api -f ./manifest.yml;
     skip_cleanup: true
     on:
       branch: master
