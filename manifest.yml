@@ -2,7 +2,7 @@
 applications:
 - name:    vs-enterpriseweb-api
   host:    vs-enterpriseweb-api
-  memory:  256M
+  memory:  512M
   command: npm run startserver
   services:
     - vs-enterpriseweb-mongodb
