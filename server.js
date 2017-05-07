@@ -28,9 +28,10 @@ import { loadPosts } from './postData';
 
 import Post from './public/api/posts/post.schema'
 
-import config from './config';
+import { Mockgoose } from 'mockgoose';
+import { nodeEnv } from './config';
 
-var app = express();
+export const app = express();
 
 
 // Util is handy to have around, so thats why that's here.
@@ -73,32 +74,48 @@ var mongodb;
 // connect to that URI, and also pass a number of SSL settings to the
 // call. Among those SSL settings is the SSL CA, into which we pass the array
 // wrapped and now decoded ca_certificate_base64,
-mongoose.connect(credentials.uri, {
-  mongos: {
-    ssl: true,
-    sslValidate: true,
-    sslCA: ca,
-    poolSize: 1,
-    reconnectTries: 1
-  }
-},
-  function (err, db) {
-    // Here we handle the async response. This is a simple example and
-    // we're not going to inject the database connection into the
-    // middleware, just save it in a global variable, as long as there
-    // isn't an error.
-    if (err) {
-      console.log(err);
-    } else {
-      // Although we have a connection, it's to the "admin" database
-      // of MongoDB deployment. In this example, we want the
-      // "examples" database so what we do here is create that
-      // connection using the current connection.
-      //mongodb = db.db("examples"); 
 
+
+if (nodeEnv == 'test') {
+  //use mockgoose for testing
+  var mockgoose = new Mockgoose(mongoose);
+  mockgoose.prepareStorage().then(() => {
+    mongoose.connect(credentials.uri, {
+      mongos: {
+        ssl: true,
+        sslValidate: true,
+        sslCA: ca,
+        poolSize: 1,
+        reconnectTries: 1
+      }
+    },
+      function (err, db) {
+        console.log("something went wrong", err);
+      }
+    );
+  });
+}
+else {
+  //use real deal for everything else
+  mongoose.connect(credentials.uri, {
+    mongos: {
+      ssl: true,
+      sslValidate: true,
+      sslCA: ca,
+      poolSize: 1,
+      reconnectTries: 1
     }
-  }
-);
+  },
+    function (err, db) {
+      console.log("something went wrong", err);
+    }
+  );
+}
+
+mongoose.connection.on('error', function (err) {
+  console.error('MongoDB connection error: ' + err);
+  process.exit(-1);
+});
 
 app.use(cors())
 
@@ -117,24 +134,24 @@ app.use(express.static(__dirname + '/public'));
 //Add a post
 app.post('/api/hello', (req, res) => {
   let newPost = req.body;
-      return res.status(201).send({
-        uri: credentials.uri,
-        test: "hello world",
-        port: port,
-        bb: newPost
+  return res.status(201).send({
+    uri: credentials.uri,
+    test: "hello world",
+    port: port,
+    bb: newPost
+  });
+  /*
+    if (newPost) {
+      Post.create(newPost, (err, post) => {
+        if (err) {
+          return handleError(res, err);
+        }
+        return res.status(201).send(post);
       });
-/*
-  if (newPost) {
-    Post.create(newPost, (err, post) => {
-      if (err) {
-        return handleError(res, err);
-      }
-      return res.status(201).send(post);
-    });
-  } else {
-    return handleError(res, err);
-  }
-  */
+    } else {
+      return handleError(res, err);
+    }
+    */
 });
 
 loadPosts();
